@@ -9,12 +9,14 @@ import {
   ActivityIndicator,
   StatusBar,
   FlatList,
+  Image,
 } from 'react-native';
 // import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './style';
 import Select from '../../components/Select';
+import { fetchAll } from '../../requests/userRequests';
 
 export default function Home(/*{ navigation }*/) {
   // const navigationStack = useNavigation();
@@ -26,6 +28,7 @@ export default function Home(/*{ navigation }*/) {
   const [isLoading, setIsLoading] = useState(true);
   const [selection, setSelection] = useState(0);
   const [data, setData] = useState([]);
+  const [itemButtonText, setItemButtonText] = useState('Unfollow');
 
   useEffect(() => {
     const loadUserData = async () => {
@@ -108,24 +111,56 @@ export default function Home(/*{ navigation }*/) {
     return newErrors;
   };
 
-  const data = [
-    { id: '1', name: 'Usuário 1' },
-    { id: '2', name: 'Usuário 2' },
-    { id: '3', name: 'Usuário 3' },
-    // Adicione mais usuários conforme necessário
-  ];
+  const handleSearch = async () => {
+    let value = null;
+    switch (selection) {
+      case 1:
+        value = 'followers';
+        break;
+      case 2:
+        value = 'following';
+        break;
+
+      default:
+        break;
+    }
+
+    if (value) {
+      const following = await fetchAll(value);
+
+      setData(following);
+    } else {
+      const following = await fetchAll('following');
+      const followers = await fetchAll('followers');
+      if (selection === 3) {
+        const followingNotFollowers = await compareFollowersFollowing(
+          following,
+          followers
+        );
+        console.log(followingNotFollowers);
+      }
+    }
+  };
+
+  function compareFollowersFollowing(content, container) {
+    const commonKeys = Object.keys(content).filter((key) =>
+      container.hasOwnProperty(key)
+    );
+    const result = Object.fromEntries(
+      commonKeys.map((key) => [key, content[key]])
+    );
+    return result;
+  }
 
   const renderItem = ({ item }) => (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        padding: 10,
-      }}
-    >
-      <Text>{item.name}</Text>
-      <TouchableOpacity onPress={() => handleButtonClick(item.id)}>
-        <Text style={{ color: 'blue' }}>Botão</Text>
+    <View style={styles.item}>
+      <Image style={styles.itemAvatar} source={{ uri: item.avatar_url }} />
+      <Text style={styles.itemLogin}>{item.login}</Text>
+      <TouchableOpacity
+        style={styles.itemButton}
+        onPress={() => handleButtonClick(item.id)}
+      >
+        <Text style={styles.itemButtonText}>{itemButtonText}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -143,7 +178,7 @@ export default function Home(/*{ navigation }*/) {
       />
     </View>
   ) : (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <View style={styles.container}>
       <StatusBar
         animated
         backgroundColor="#0D1117"
@@ -173,7 +208,7 @@ export default function Home(/*{ navigation }*/) {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-          onPress={() => handleSave()}
+          onPress={() => handleSearch()}
           style={styles.buttonSave}
         >
           {isSaving ? (
@@ -198,6 +233,6 @@ export default function Home(/*{ navigation }*/) {
           )}
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 }

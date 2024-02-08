@@ -114,6 +114,47 @@ const styles = StyleSheet.create({
     marginLeft: 127,
     marginBottom: 2,
   },
+
+  list: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#30363D',
+    borderRadius: 5,
+    marginRight: 14,
+    marginLeft: 14,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  item: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+  },
+  itemAvatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  itemLogin: {
+    color: '#FFF',
+  },
+  itemButton: {
+    backgroundColor: '#30363D',
+    borderWidth: 0.5,
+    borderColor: '#8B949E',
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 6,
+    paddingTop: 6,
+    paddingRight: 8,
+    paddingLeft: 8,
+  },
+  itemButtonText: {
+    color: '#BFD1D9',
+  },
 });
 
 export default styles;
