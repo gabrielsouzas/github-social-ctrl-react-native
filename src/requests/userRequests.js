@@ -40,3 +40,57 @@ export async function fetchAll(res) {
     return { status: 'error', message: `Error fetching data. Error: ${error}` };
   }
 }
+
+export async function followUser(username) {
+  try {
+    const userData = await getUserDataAsyncStorage('userData');
+
+    if (userData != null || userData != undefined) {
+      const octokit = new Octokit({
+        auth: userData.token,
+      });
+
+      await octokit.request('PUT /user/following/{username}', {
+        username: username,
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      });
+
+      return { status: 'success', message: 'User followed' };
+    }
+  } catch (error) {
+    console.error('Error following user. Error:', error);
+    return {
+      status: 'error',
+      message: `Error following user. Error: ${error}`,
+    };
+  }
+}
+
+export async function unFollowUser(username) {
+  try {
+    const userData = await getUserDataAsyncStorage('userData');
+
+    if (userData != null || userData != undefined) {
+      const octokit = new Octokit({
+        auth: userData.token,
+      });
+
+      await octokit.request('DELETE /user/following/{username}', {
+        username: username,
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      });
+
+      return { status: 'success', message: 'User unfollowed' };
+    }
+  } catch (error) {
+    console.error('Error unfollowing user. Error:', error);
+    return {
+      status: 'error',
+      message: `Error unfollowing user. Error: ${error}`,
+    };
+  }
+}

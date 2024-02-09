@@ -124,6 +124,8 @@ const styles = StyleSheet.create({
     marginLeft: 14,
     marginTop: 20,
     marginBottom: 20,
+
+    justifyContent: 'center',
   },
   item: {
     flexDirection: 'row',
@@ -138,6 +140,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   itemLogin: {
+    textAlign: 'center',
     color: '#FFF',
   },
   itemButton: {
@@ -151,9 +154,15 @@ const styles = StyleSheet.create({
     paddingTop: 6,
     paddingRight: 8,
     paddingLeft: 8,
+
+    width: 75,
   },
   itemButtonText: {
     color: '#BFD1D9',
+  },
+  clickButton: {},
+  searchingList: {
+    transform: [{ scale: 1.7 }],
   },
 });
 

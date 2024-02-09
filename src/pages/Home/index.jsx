@@ -1,183 +1,258 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
 import {
-  ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
   ActivityIndicator,
   StatusBar,
   FlatList,
   Image,
+  Alert,
 } from 'react-native';
 // import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './style';
 import Select from '../../components/Select';
-import { fetchAll } from '../../requests/userRequests';
+import { fetchAll, followUser } from '../../requests/userRequests';
+
+// import followers from '../../dataTests/followers';
+// import following from '../../dataTests/following';
 
 export default function Home(/*{ navigation }*/) {
   // const navigationStack = useNavigation();
 
-  const [username, setUsername] = useState('');
-  const [token, setToken] = useState('');
-  const [errors, setErrors] = useState({});
-  const [isSaving, setIsSaving] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [username, setUsername] = useState('');
+  // const [token, setToken] = useState('');
+  // const [errors, setErrors] = useState({});
+  const [isSearching, setIsSearching] = useState(false);
+  // const [isLoading, setIsLoading] = useState(true);
   const [selection, setSelection] = useState(0);
   const [data, setData] = useState([]);
   const [itemButtonText, setItemButtonText] = useState('Unfollow');
+  const [isFetching, setIsFetching] = useState(false);
 
-  useEffect(() => {
-    const loadUserData = async () => {
-      try {
-        const response = await AsyncStorage.getItem('userData');
-        if (response) {
-          const userData = JSON.parse(response);
+  /*const handleSearch = async () => {
+    setIsSearching(true);
+    try {
+      let value = null;
+      switch (selection) {
+        case 1:
+          value = 'followers';
+          break;
+        case 2:
+          value = 'following';
+          break;
 
-          fillFields(userData);
+        default:
+          break;
+      }
+
+      if (value) {
+        const following = await fetchAll(value);
+
+        setData(following);
+      } else {
+        const following = await fetchAll('following');
+        const followers = await fetchAll('followers');
+
+        if (selection === 3) {
+          const followingNotFollowers = await compareFollowersFollowing(
+            followers,
+            following
+          );
+          setData(followingNotFollowers);
+        } else if (selection === 4) {
+          const followersNotFollowing = await compareFollowersFollowing(
+            following,
+            followers
+          );
+          setData(followersNotFollowing);
         }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadUserData();
-  }, []);
-
-  const fillFields = (data) => {
-    setUsername(data.username);
-    setToken(data.token);
-  };
-
-  const handleSave = async () => {
-    setIsSaving(true);
-    try {
-      const newErrors = await validateForm();
-      setErrors(newErrors);
-
-      if (Object.keys(newErrors).length === 0) {
-        const userData = {
-          username,
-          token,
-        };
-
-        await AsyncStorage.setItem(
-          'userData',
-          JSON.stringify(userData),
-          (err) => {
-            if (err) {
-              console.log('Erro ao armazenar dados no AsyncStorage.');
-              throw err;
-            }
-          }
-        ).catch((err) => {
-          console.log(`Erro: ${err}`);
-        });
-
-        // navigation.navigate('Home');
       }
     } catch (error) {
-      console.log(`Erro ao salvar dados. Erro: ${error}`);
+      console.log(`Error searching data. Error: ${error}`);
     } finally {
-      setIsSaving(false);
+      setIsSearching(false);
     }
-  };
-
-  // eslint-disable-next-line no-unused-vars
-  const getUserDataAsyncStorage = async () => {
-    try {
-      const value = await AsyncStorage.getItem('userData');
-      if (value !== null) {
-        return JSON.parse(value);
-      }
-      return 'Nenhum dado encontrado!';
-    } catch (error) {
-      return `Erro ao buscar dados do usuário no AsyncStorage. Erro: ${error}`;
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!username.trim()) {
-      newErrors.username = 'UserName é obrigatório';
-    }
-
-    return newErrors;
-  };
+  };*/
 
   const handleSearch = async () => {
-    let value = null;
-    switch (selection) {
-      case 1:
-        value = 'followers';
-        break;
-      case 2:
-        value = 'following';
-        break;
+    setIsSearching(true);
 
-      default:
-        break;
-    }
+    try {
+      let value = null;
+      switch (selection) {
+        case 1:
+          value = 'followers';
+          break;
+        case 2:
+          value = 'following';
+          break;
 
-    if (value) {
-      const following = await fetchAll(value);
-
-      setData(following);
-    } else {
-      const following = await fetchAll('following');
-      const followers = await fetchAll('followers');
-      if (selection === 3) {
-        const followingNotFollowers = await compareFollowersFollowing(
-          following,
-          followers
-        );
-        console.log(followingNotFollowers);
+        default:
+          break;
       }
+
+      if (value) {
+        if (value === 'following') {
+          const following = await fetchAll('following');
+          setItemButtonText('Unfollow');
+          setData(following);
+        } else {
+          const followers = await fetchAll('followers');
+          const following = await fetchAll('following');
+
+          const followersNotFollowing = await compareFollowersFollowing(
+            following,
+            followers
+          );
+
+          const newfollowersNotFollowing = followers.map((item) => {
+            const matchingItem = followersNotFollowing.find(
+              (item2) => item2.login === item.login
+            );
+
+            if (matchingItem) {
+              // Se o item existe em array2, adiciona o novo atributo
+              return { ...item, buttonText: 'Follow' };
+            }
+
+            // Se não, retorna o item1 sem modificar
+            return item;
+          });
+
+          setItemButtonText('Unfollow');
+          setData(newfollowersNotFollowing);
+        }
+      } else {
+        const following = await fetchAll('following');
+        const followers = await fetchAll('followers');
+
+        if (selection === 3) {
+          const followingNotFollowers = await compareFollowersFollowing(
+            followers,
+            following
+          );
+          setItemButtonText('Unfollow');
+          setData(followingNotFollowers);
+        } else if (selection === 4) {
+          const followersNotFollowing = await compareFollowersFollowing(
+            following,
+            followers
+          );
+          setItemButtonText('Follow');
+          setData(followersNotFollowing);
+        }
+      }
+    } catch (error) {
+      console.log(`Error searching data. Error: ${error}`);
+    } finally {
+      setIsSearching(false);
     }
   };
 
   function compareFollowersFollowing(content, container) {
-    const commonKeys = Object.keys(content).filter((key) =>
-      container.hasOwnProperty(key)
+    const result = container.filter(
+      (obj2) => !content.some((obj1) => obj1.id === obj2.id)
     );
-    const result = Object.fromEntries(
-      commonKeys.map((key) => [key, content[key]])
-    );
+
     return result;
   }
 
+  // Break login lines if they exceed size 20
+  function breakLine(login) {
+    if (login.length > 20) {
+      const array = splitString(login, 20);
+      let newLogin = '';
+      array.forEach((el, index, array2) => {
+        if (index === array2.length - 1) {
+          newLogin += el;
+        } else {
+          newLogin += `${el}\n`;
+        }
+      });
+      return newLogin;
+    }
+    return login;
+  }
+
+  // Split a string by a given size
+  function splitString(str, size) {
+    var result = [];
+    for (var i = 0; i < str.length; i += size) {
+      result.push(str.substring(i, i + size));
+    }
+    return result;
+  }
+
+  // Item representing a user in the fetched list of users
   const renderItem = ({ item }) => (
     <View style={styles.item}>
       <Image style={styles.itemAvatar} source={{ uri: item.avatar_url }} />
-      <Text style={styles.itemLogin}>{item.login}</Text>
+      <Text style={styles.itemLogin}>{breakLine(item.login)}</Text>
       <TouchableOpacity
         style={styles.itemButton}
-        onPress={() => handleButtonClick(item.id)}
+        onPress={() =>
+          handleButtonClick(
+            item.login,
+            item.hasOwnProperty('buttonText') ? item.buttonText : itemButtonText
+          )
+        }
       >
-        <Text style={styles.itemButtonText}>{itemButtonText}</Text>
+        {isFetching ? (
+          <ActivityIndicator
+            size="small"
+            color="#8B949E"
+            style={styles.clickButton}
+          />
+        ) : (
+          <Text style={styles.itemButtonText}>
+            {item.hasOwnProperty('buttonText')
+              ? item.buttonText
+              : itemButtonText}
+          </Text>
+        )}
       </TouchableOpacity>
     </View>
   );
 
-  const handleButtonClick = (userId) => {
-    console.log(`Botão pressionado para o usuário ${userId}`);
+  const handleButtonClick = async (username, value) => {
+    try {
+      if (value === 'Follow') {
+        const response = await followUser(username);
+        if (response) {
+          if (response.status === 'success') {
+            console.log(response.message);
+            handleSearch();
+          } else {
+            console.log(response.message);
+            Alert.alert(response.message);
+          }
+        } else {
+          console.log('No response to the request.');
+        }
+      } else {
+        const response = await unFollowUser(username);
+        if (response) {
+          if (response.status === 'sucess') {
+            setItemButtonText('Unfollow');
+          } else {
+            console.log(response.message);
+            Alert.alert(response.message);
+          }
+        } else {
+          console.log('No response to the request.');
+        }
+      }
+    } catch (error) {
+      console.log(
+        `Error following/unfollowing user ${username}. Error: ${error}`
+      );
+    }
   };
 
-  return isLoading ? (
-    <View style={styles.containerIsLoading}>
-      <ActivityIndicator
-        size="large"
-        color="#FFF"
-        style={styles.activityIndicator}
-      />
-    </View>
-  ) : (
+  return (
     <View style={styles.container}>
       <StatusBar
         animated
@@ -211,10 +286,9 @@ export default function Home(/*{ navigation }*/) {
           onPress={() => handleSearch()}
           style={styles.buttonSave}
         >
-          {isSaving ? (
+          {isSearching ? (
             <>
               <Text style={styles.buttonSaveText}>Searching</Text>
-              <ActivityIndicator size="small" color="#FFF" />
             </>
           ) : (
             <Text style={styles.buttonSaveText}>Search</Text>
@@ -222,14 +296,18 @@ export default function Home(/*{ navigation }*/) {
         </TouchableOpacity>
 
         <View style={styles.list}>
-          {data ? (
+          {isSearching ? (
+            <ActivityIndicator
+              size="large"
+              color="#8B949E"
+              style={styles.searchingList}
+            />
+          ) : (
             <FlatList
               data={data}
               renderItem={renderItem}
               keyExtractor={(item) => item.id}
             />
-          ) : (
-            <Text>Select an item an click on Search</Text>
           )}
         </View>
       </View>
