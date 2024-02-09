@@ -55,7 +55,7 @@ or
 yarn install
 ```
 
-# ▶️ Usage
+## ▶️ Usage
 
 Run the application on an emulator or physical device with Expo:
 
@@ -64,10 +64,10 @@ cd github-social-ctrl-react-native
 npx expo start
 ```
 
-# 🤝 Contribution
+## 🤝 Contribution
 
 Contributions are welcome! Feel free to open issues, propose improvements or send pull requests.
 
-# 📄 License
+## 📄 License
 
 This project is distributed under the MIT License.
