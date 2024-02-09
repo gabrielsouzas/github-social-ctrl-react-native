@@ -19,7 +19,8 @@ import {
   followUser,
   unFollowUser,
 } from '../../requests/userRequests';
-import ModalMessage from '../../components/Modal';
+import ModalMessage from '../../components/ModalMessage';
+import ModalUserData from '../../components/ModalUserData';
 
 // import followers from '../../dataTests/followers';
 // import following from '../../dataTests/following';
@@ -39,6 +40,9 @@ export default function Home(/*{ navigation }*/) {
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState('Message');
   const [error, setError] = useState('Error');
+
+  const [modalUserDataVisible, setModalUserDataVisible] = useState(false);
+  const [clickedUsername, setClickedUsername] = useState('');
 
   /*const handleSearch = async () => {
     setIsSearching(true);
@@ -145,6 +149,11 @@ export default function Home(/*{ navigation }*/) {
           setItemButtonText('Unfollow');
           setData(followingNotFollowers);
         } else if (selection === 4) {
+          const followersNotFollowingNotOrg =
+            await compareFollowersFollowingNotOrg(followers, following);
+          setItemButtonText('Unfollow');
+          setData(followersNotFollowingNotOrg);
+        } else if (selection === 5) {
           const followersNotFollowing = await compareFollowersFollowing(
             following,
             followers
@@ -166,6 +175,16 @@ export default function Home(/*{ navigation }*/) {
     );
 
     return result;
+  }
+
+  function compareFollowersFollowingNotOrg(content, container) {
+    const result = container.filter(
+      (obj2) => !content.some((obj1) => obj1.id === obj2.id)
+    );
+
+    const filterOrg = result.filter((item) => item.type === 'User');
+
+    return filterOrg;
   }
 
   // Break login lines if they exceed size 20
@@ -194,11 +213,21 @@ export default function Home(/*{ navigation }*/) {
     return result;
   }
 
+  const handleLoginClick = async (username) => {
+    setClickedUsername(username);
+    setModalUserDataVisible(true);
+  };
+
   // Item representing a user in the fetched list of users
   const renderItem = ({ item }) => (
     <View style={styles.item}>
       <Image style={styles.itemAvatar} source={{ uri: item.avatar_url }} />
-      <Text style={styles.itemLogin}>{breakLine(item.login)}</Text>
+      <Text
+        style={styles.itemLogin}
+        onPress={() => handleLoginClick(item.login)}
+      >
+        {breakLine(item.login)}
+      </Text>
       <TouchableOpacity
         style={styles.itemButton}
         onPress={() =>
@@ -297,6 +326,12 @@ export default function Home(/*{ navigation }*/) {
         message={error}
       />
 
+      <ModalUserData
+        modalVisible={modalUserDataVisible}
+        setModalVisible={setModalUserDataVisible}
+        username={clickedUsername}
+      />
+
       <View style={styles.header}>
         <Text style={styles.title}>GitHub Social Manage</Text>
       </View>
@@ -308,6 +343,7 @@ export default function Home(/*{ navigation }*/) {
             'Followers',
             'Following',
             `Followed who don't follow you`,
+            `Followed who don't follow you not organizations`,
             `Followers you don't follow`,
             'Organizations',
           ]}

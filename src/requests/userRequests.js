@@ -36,7 +36,7 @@ export async function fetchAll(res) {
     }
     return { status: 'empty', message: 'AsyncStorage data not found' };
   } catch (error) {
-    console.error('Erro ao obter dados:', error);
+    console.error('Error getting data:', error);
     return { status: 'error', message: `Error fetching data. Error: ${error}` };
   }
 }
@@ -104,5 +104,30 @@ export async function unFollowUser(username) {
       error: `Error: ${msg ? msg : error}`,
       message: `Error unfollowing user`,
     };
+  }
+}
+
+export async function fetchUserData(username) {
+  try {
+    const userData = await getUserDataAsyncStorage('userData');
+
+    if (userData != null || userData != undefined) {
+      const octokit = new Octokit({
+        auth: userData.token,
+      });
+
+      const response = await octokit.request('GET /users/{username}', {
+        username: username,
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      });
+
+      return response;
+    }
+    return { status: 'empty', message: 'AsyncStorage data not found' };
+  } catch (error) {
+    console.error('Error getting data:', error);
+    return { status: 'error', message: `Error fetching data. Error: ${error}` };
   }
 }
