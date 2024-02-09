@@ -12,7 +12,7 @@ GitHub Social Management is a mobile application built in React Native that allo
 
 ## 📷 Screenshots
 
-<img src="./src/images/screenHome.jpeg" height="500" />
+<img src="./src/images/screenshoot01.jpeg" />
 
 ## 🛠️ Tools, Technologies, and Libraries
 

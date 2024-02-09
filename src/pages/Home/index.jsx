@@ -14,7 +14,12 @@ import {
 
 import styles from './style';
 import Select from '../../components/Select';
-import { fetchAll, followUser } from '../../requests/userRequests';
+import {
+  fetchAll,
+  followUser,
+  unFollowUser,
+} from '../../requests/userRequests';
+import ModalMessage from '../../components/Modal';
 
 // import followers from '../../dataTests/followers';
 // import following from '../../dataTests/following';
@@ -31,6 +36,9 @@ export default function Home(/*{ navigation }*/) {
   const [data, setData] = useState([]);
   const [itemButtonText, setItemButtonText] = useState('Unfollow');
   const [isFetching, setIsFetching] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [message, setMessage] = useState('Message');
+  const [error, setError] = useState('Error');
 
   /*const handleSearch = async () => {
     setIsSearching(true);
@@ -218,16 +226,25 @@ export default function Home(/*{ navigation }*/) {
   );
 
   const handleButtonClick = async (username, value) => {
+    setIsFetching(true);
     try {
       if (value === 'Follow') {
         const response = await followUser(username);
         if (response) {
           if (response.status === 'success') {
             console.log(response.message);
+            setMessage('User Followed');
+            setError(
+              'Wait a few seconds for the API to finish the operation and reload the page'
+            );
+            setModalVisible(true);
             handleSearch();
           } else {
             console.log(response.message);
-            Alert.alert(response.message);
+            setMessage(response.message);
+            const err = 'error' in response ? response.error : 'Unknow error';
+            setError(err);
+            setModalVisible(true);
           }
         } else {
           console.log('No response to the request.');
@@ -235,11 +252,20 @@ export default function Home(/*{ navigation }*/) {
       } else {
         const response = await unFollowUser(username);
         if (response) {
-          if (response.status === 'sucess') {
-            setItemButtonText('Unfollow');
+          if (response.status === 'success') {
+            console.log(response.message);
+            setMessage('User Unfollowed');
+            setError(
+              'Wait a few seconds for the API to finish the operation and reload the page'
+            );
+            setModalVisible(true);
+            handleSearch();
           } else {
             console.log(response.message);
-            Alert.alert(response.message);
+            setMessage(response.message);
+            const err = 'error' in response ? response.error : 'Unknow error';
+            setError(err);
+            setModalVisible(true);
           }
         } else {
           console.log('No response to the request.');
@@ -249,6 +275,8 @@ export default function Home(/*{ navigation }*/) {
       console.log(
         `Error following/unfollowing user ${username}. Error: ${error}`
       );
+    } finally {
+      setIsFetching(false);
     }
   };
 
@@ -260,6 +288,13 @@ export default function Home(/*{ navigation }*/) {
         barStyle="light-content"
         showHideTransition="fade"
         hidden={false}
+      />
+
+      <ModalMessage
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        title={message}
+        message={error}
       />
 
       <View style={styles.header}>

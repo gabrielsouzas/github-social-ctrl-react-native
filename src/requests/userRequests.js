@@ -61,9 +61,15 @@ export async function followUser(username) {
     }
   } catch (error) {
     console.error('Error following user. Error:', error);
+    let msg = '';
+    if (error.message.includes('Requires authentication')) {
+      msg =
+        'Enter an Access Token on the registration screen to authenticate yourself to carry out this operation';
+    }
     return {
       status: 'error',
-      message: `Error following user. Error: ${error}`,
+      error: `Error: ${msg ? msg : error}`,
+      message: `Error unfollowing user`,
     };
   }
 }
@@ -88,9 +94,15 @@ export async function unFollowUser(username) {
     }
   } catch (error) {
     console.error('Error unfollowing user. Error:', error);
+    let msg = '';
+    if (error.message.includes('Requires authentication')) {
+      msg =
+        'Enter an Access Token on the registration screen to authenticate yourself to carry out this operation';
+    }
     return {
       status: 'error',
-      message: `Error unfollowing user. Error: ${error}`,
+      error: `Error: ${msg ? msg : error}`,
+      message: `Error unfollowing user`,
     };
   }
 }
