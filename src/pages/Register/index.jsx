@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
 import {
   ScrollView,
@@ -9,13 +8,13 @@ import {
   ActivityIndicator,
   StatusBar,
 } from 'react-native';
-// import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './style';
 
-export default function Register(/*{ navigation }*/) {
-  // const navigationStack = useNavigation();
+export default function Register({ navigation }) {
+  const navigationStack = useNavigation();
 
   const [username, setUsername] = useState('');
   const [token, setToken] = useState('');
@@ -72,7 +71,7 @@ export default function Register(/*{ navigation }*/) {
           console.log(`Erro: ${err}`);
         });
 
-        // navigation.navigate('Home');
+        navigation.navigate('Home');
       }
     } catch (error) {
       console.log(`Erro ao salvar dados. Erro: ${error}`);
