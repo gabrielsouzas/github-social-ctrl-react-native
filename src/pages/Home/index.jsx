@@ -8,9 +8,9 @@ import {
   StatusBar,
   FlatList,
   Image,
-  Alert,
 } from 'react-native';
-// import { useNavigation } from '@react-navigation/native';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 import styles from './style';
 import Select from '../../components/Select';
@@ -25,12 +25,9 @@ import ModalUserData from '../../components/ModalUserData';
 // import followers from '../../dataTests/followers';
 // import following from '../../dataTests/following';
 
-export default function Home(/*{ navigation }*/) {
+export default function Home({ navigation }) {
   // const navigationStack = useNavigation();
 
-  // const [username, setUsername] = useState('');
-  // const [token, setToken] = useState('');
-  // const [errors, setErrors] = useState({});
   const [isSearching, setIsSearching] = useState(false);
   // const [isLoading, setIsLoading] = useState(true);
   const [selection, setSelection] = useState(0);
@@ -237,7 +234,7 @@ export default function Home(/*{ navigation }*/) {
           )
         }
       >
-        {isFetching ? (
+        {isFetching && clickedUsername === item.login ? (
           <ActivityIndicator
             size="small"
             color="#8B949E"
@@ -255,6 +252,7 @@ export default function Home(/*{ navigation }*/) {
   );
 
   const handleButtonClick = async (username, value) => {
+    setClickedUsername(username);
     setIsFetching(true);
     try {
       if (value === 'Follow') {
@@ -334,6 +332,14 @@ export default function Home(/*{ navigation }*/) {
 
       <View style={styles.header}>
         <Text style={styles.title}>GitHub Social Manage</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+          <FontAwesome5
+            style={styles.userData}
+            name="user-cog"
+            size={22}
+            color="#30363D"
+          />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.content}>

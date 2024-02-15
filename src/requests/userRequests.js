@@ -1,4 +1,4 @@
-import { getUserDataAsyncStorage } from '../utils/asyncStorage';
+import { getApiKey, getUserDataAsyncStorage } from '../utils/asyncStorage';
 
 const Octokit = require('@octokit/core').Octokit;
 
@@ -7,17 +7,18 @@ export async function fetchAll(res) {
   let page = 1;
 
   try {
-    const userData = await getUserDataAsyncStorage('userData');
+    const userName = await getUserDataAsyncStorage('username');
+    const acessToken = await getApiKey();
 
-    if (userData != null || userData != undefined) {
+    if (userName != null || userName != undefined) {
       const octokit = new Octokit({
-        auth: userData.token,
+        auth: acessToken || '',
       });
 
       while (true) {
         const url = `GET /users/{username}/${res}?per_page=100&page=${page}`;
         const response = await octokit.request(url, {
-          username: userData.username,
+          username: userName,
           headers: {
             'X-GitHub-Api-Version': '2022-11-28',
           },
@@ -43,11 +44,12 @@ export async function fetchAll(res) {
 
 export async function followUser(username) {
   try {
-    const userData = await getUserDataAsyncStorage('userData');
+    const userName = await getUserDataAsyncStorage('username');
+    const acessToken = await getApiKey();
 
-    if (userData != null || userData != undefined) {
+    if (userName != null || userName != undefined) {
       const octokit = new Octokit({
-        auth: userData.token,
+        auth: acessToken || '',
       });
 
       await octokit.request('PUT /user/following/{username}', {
@@ -76,11 +78,12 @@ export async function followUser(username) {
 
 export async function unFollowUser(username) {
   try {
-    const userData = await getUserDataAsyncStorage('userData');
+    const userName = await getUserDataAsyncStorage('username');
+    const acessToken = await getApiKey();
 
-    if (userData != null || userData != undefined) {
+    if (userName != null || userName != undefined) {
       const octokit = new Octokit({
-        auth: userData.token,
+        auth: acessToken || '',
       });
 
       await octokit.request('DELETE /user/following/{username}', {
@@ -109,11 +112,12 @@ export async function unFollowUser(username) {
 
 export async function fetchUserData(username) {
   try {
-    const userData = await getUserDataAsyncStorage('userData');
+    const userName = await getUserDataAsyncStorage('username');
+    const acessToken = await getApiKey();
 
-    if (userData != null || userData != undefined) {
+    if (userName != null || userName != undefined) {
       const octokit = new Octokit({
-        auth: userData.token,
+        auth: acessToken || '',
       });
 
       const response = await octokit.request('GET /users/{username}', {

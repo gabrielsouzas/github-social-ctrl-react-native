@@ -1,7 +1,6 @@
-import { fetchAll } from './src/requests/userRequests';
-import Register from './src/pages/Register';
 import Home from './src/pages/Home';
+import Routes from './src/routes';
 
 export default function App() {
-  return <Home />;
+  return <Routes />;
 }

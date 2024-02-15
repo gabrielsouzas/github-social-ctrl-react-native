@@ -36,12 +36,6 @@ export default function StackRoutes() {
     >
       <Stack.Screen
         options={{ headerShown: false }}
-        name="CheckUserDataScreen"
-        component={CheckUserDataScreen}
-      />
-
-      <Stack.Screen
-        options={{ headerShown: false }}
         name="Home"
         component={Home}
       />
@@ -51,7 +45,7 @@ export default function StackRoutes() {
           title: 'Registration',
           headerTintColor: '#FFF',
           headerStyle: {
-            backgroundColor: colors.backgroundTabBar,
+            backgroundColor: '#0D1117',
             borderBottomWidth: 0,
           },
         }}

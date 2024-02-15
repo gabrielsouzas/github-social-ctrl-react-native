@@ -12,9 +12,10 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './style';
+import { getApiKey, saveApiKey, setItem } from '../../utils/asyncStorage';
 
 export default function Register({ navigation }) {
-  const navigationStack = useNavigation();
+  // const navigationStack = useNavigation();
 
   const [username, setUsername] = useState('');
   const [token, setToken] = useState('');
@@ -23,23 +24,39 @@ export default function Register({ navigation }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadUserData = async () => {
-      try {
-        const response = await AsyncStorage.getItem('userData');
-        if (response) {
-          const userData = JSON.parse(response);
-
-          fillFields(userData);
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     loadUserData();
+    loadAcessToken();
   }, []);
+
+  const loadUserData = async () => {
+    try {
+      const response = await AsyncStorage.getItem('username');
+      if (response) {
+        const username = JSON.parse(response);
+
+        setUsername(username);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadAcessToken = async () => {
+    try {
+      const response = await getApiKey('acessToken');
+      if (response) {
+        const acessToken = JSON.parse(response);
+
+        setToken(acessToken);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const fillFields = (data) => {
     setUsername(data.username);
@@ -53,43 +70,17 @@ export default function Register({ navigation }) {
       setErrors(newErrors);
 
       if (Object.keys(newErrors).length === 0) {
-        const userData = {
-          username,
-          token,
-        };
+        await setItem('username', username);
 
-        await AsyncStorage.setItem(
-          'userData',
-          JSON.stringify(userData),
-          (err) => {
-            if (err) {
-              console.log('Erro ao armazenar dados no AsyncStorage.');
-              throw err;
-            }
-          }
-        ).catch((err) => {
-          console.log(`Erro: ${err}`);
-        });
-
-        navigation.navigate('Home');
+        if (token.length > 0) {
+          await saveApiKey(token);
+        }
       }
     } catch (error) {
       console.log(`Erro ao salvar dados. Erro: ${error}`);
     } finally {
       setIsSaving(false);
-    }
-  };
-
-  // eslint-disable-next-line no-unused-vars
-  const getUserDataAsyncStorage = async () => {
-    try {
-      const value = await AsyncStorage.getItem('userData');
-      if (value !== null) {
-        return JSON.parse(value);
-      }
-      return 'Nenhum dado encontrado!';
-    } catch (error) {
-      return `Erro ao buscar dados do usuário no AsyncStorage. Erro: ${error}`;
+      // navigation.navigate('Home');
     }
   };
 
@@ -97,7 +88,7 @@ export default function Register({ navigation }) {
     const newErrors = {};
 
     if (!username.trim()) {
-      newErrors.username = 'UserName é obrigatório';
+      newErrors.username = 'UserName is required';
     }
 
     return newErrors;
