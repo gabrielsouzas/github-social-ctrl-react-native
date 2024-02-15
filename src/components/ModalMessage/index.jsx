@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Text, Pressable, View, TextInput } from 'react-native';
 
 import styles from './style';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ModalMessage({
   modalVisible,
@@ -9,7 +10,11 @@ export default function ModalMessage({
   title,
   message,
 }) {
-  const handleRegistrationClick = () => {};
+  const navigation = useNavigation();
+
+  const handleRegistrationClick = () => {
+    navigation.navigate('Register');
+  };
 
   return (
     <Modal
@@ -33,7 +38,7 @@ export default function ModalMessage({
           <View style={styles.buttonContainer}>
             <Pressable
               style={styles.button}
-              onPress={() => handleRegistrationClick}
+              onPress={() => handleRegistrationClick()}
             >
               <Text style={styles.textStyle}>Registration</Text>
             </Pressable>

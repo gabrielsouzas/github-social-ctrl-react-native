@@ -32,7 +32,7 @@ export const getApiKey = async (acessToken) => {
   try {
     const apiKey = await SecureStore.getItemAsync(acessToken);
     if (apiKey) {
-      console.log('Chave de API recuperada com sucesso:');
+      console.log('Chave de API recuperada com sucesso.');
       return apiKey;
     } else {
       console.log('Nenhuma chave de API encontrada.');
@@ -46,9 +46,22 @@ export const getApiKey = async (acessToken) => {
 
 export const saveApiKey = async (apiKey) => {
   try {
-    await SecureStore.setItemAsync('acessToken', apiKey);
-    console.log('Chave de API salva com sucesso.');
+    if (apiKey) {
+      if (apiKey.length > 0) {
+        await SecureStore.setItemAsync('acessToken', apiKey);
+        console.log('Chave de API salva com sucesso.');
+      }
+    }
   } catch (error) {
     console.error('Erro ao salvar a chave de API:', error);
+  }
+};
+
+export const deleteApiKey = async () => {
+  try {
+    await SecureStore.deleteItemAsync('acessToken');
+    console.log('Chave de API excluída com sucesso.');
+  } catch (error) {
+    console.error('Erro ao excluir a chave de API:', error);
   }
 };

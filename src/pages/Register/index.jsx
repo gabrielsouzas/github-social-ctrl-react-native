@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   ScrollView,
   Text,
@@ -7,12 +7,19 @@ import {
   View,
   ActivityIndicator,
   StatusBar,
+  Platform,
+  ToastAndroid,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './style';
-import { getApiKey, saveApiKey, setItem } from '../../utils/asyncStorage';
+import {
+  deleteApiKey,
+  getApiKey,
+  saveApiKey,
+  setItem,
+} from '../../utils/asyncStorage';
 
 export default function Register({ navigation }) {
   // const navigationStack = useNavigation();
@@ -22,6 +29,8 @@ export default function Register({ navigation }) {
   const [errors, setErrors] = useState({});
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const textInputTokenRef = useRef(null);
 
   useEffect(() => {
     loadUserData();
@@ -47,9 +56,9 @@ export default function Register({ navigation }) {
     try {
       const response = await getApiKey('acessToken');
       if (response) {
-        const acessToken = JSON.parse(response);
+        // const acessToken = JSON.parse(response);
 
-        setToken(acessToken);
+        setToken(response);
       }
     } catch (error) {
       console.log(error);
@@ -74,6 +83,8 @@ export default function Register({ navigation }) {
 
         if (token.length > 0) {
           await saveApiKey(token);
+        } else {
+          await deleteApiKey();
         }
       }
     } catch (error) {
@@ -92,6 +103,25 @@ export default function Register({ navigation }) {
     }
 
     return newErrors;
+  };
+
+  // OnPaste Token entry
+  const handlePaste = (event) => {
+    const pastedText = event.nativeEvent.text;
+    setToken(pastedText);
+  };
+
+  const handleLongPress = () => {
+    // Show context menu only on Android
+    console.log('log press');
+    if (Platform.OS === 'android') {
+      textInputTokenRef.current.showMenuContext();
+    } else {
+      ToastAndroid.show(
+        'Context menu not supported on iOS',
+        ToastAndroid.SHORT
+      );
+    }
   };
 
   return isLoading ? (
@@ -131,10 +161,15 @@ export default function Register({ navigation }) {
       <View style={styles.content}>
         <Text style={styles.label}>Token:</Text>
         <TextInput
+          /*ref={textInputTokenRef}*/
           style={styles.input}
+          secureTextEntry
           placeholder="Personal Acess Token (Opcional) "
           placeholderTextColor="#e1e2df80"
           onChangeText={(newText) => setToken(newText)}
+          /*editable={true}
+          onPaste={handlePaste}
+          onLongPress={() => handleLongPress()}*/
           value={token}
         />
       </View>

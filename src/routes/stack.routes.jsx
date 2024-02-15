@@ -4,6 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Home from '../pages/Home';
 import Register from '../pages/Register';
+import { getUserDataAsyncStorage } from '../utils/asyncStorage';
+import ModalMessage from '../components/ModalMessage';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,10 +16,11 @@ export default function StackRoutes() {
     // Verificar se os dados do usuário já foram cadastrados no AsyncStorage
     const checkUserInfo = async () => {
       try {
-        const userData = await AsyncStorage.getItem('userData');
+        const userName = await getUserDataAsyncStorage('username');
 
         // Se houver dados do usuário, direciona para a Home
-        if (!userData) {
+        if (!userName) {
+          console.log('register');
           setInitialRoute('Register');
         } else {
           setInitialRoute('Home');
@@ -52,6 +55,8 @@ export default function StackRoutes() {
         name="Register"
         component={Register}
       />
+
+      <Stack.Screen name="ModalMessage" component={ModalMessage} />
     </Stack.Navigator>
   );
 }

@@ -23,7 +23,9 @@ export default function ModalUserData({
   });
 
   useEffect(() => {
-    fetchData();
+    if (username) {
+      fetchData();
+    }
   }, [modalVisible]);
 
   const fetchData = async () => {

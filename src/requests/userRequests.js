@@ -8,7 +8,7 @@ export async function fetchAll(res) {
 
   try {
     const userName = await getUserDataAsyncStorage('username');
-    const acessToken = await getApiKey();
+    const acessToken = await getApiKey('acessToken');
 
     if (userName != null || userName != undefined) {
       const octokit = new Octokit({
@@ -38,14 +38,18 @@ export async function fetchAll(res) {
     return { status: 'empty', message: 'AsyncStorage data not found' };
   } catch (error) {
     console.error('Error getting data:', error);
-    return { status: 'error', message: `Error fetching data. Error: ${error}` };
+    return {
+      status: 'error',
+      message: `Error fetching data. Error: ${error}`,
+      error,
+    };
   }
 }
 
 export async function followUser(username) {
   try {
     const userName = await getUserDataAsyncStorage('username');
-    const acessToken = await getApiKey();
+    const acessToken = await getApiKey('acessToken');
 
     if (userName != null || userName != undefined) {
       const octokit = new Octokit({
@@ -79,7 +83,7 @@ export async function followUser(username) {
 export async function unFollowUser(username) {
   try {
     const userName = await getUserDataAsyncStorage('username');
-    const acessToken = await getApiKey();
+    const acessToken = await getApiKey('acessToken');
 
     if (userName != null || userName != undefined) {
       const octokit = new Octokit({
@@ -113,7 +117,7 @@ export async function unFollowUser(username) {
 export async function fetchUserData(username) {
   try {
     const userName = await getUserDataAsyncStorage('username');
-    const acessToken = await getApiKey();
+    const acessToken = await getApiKey('acessToken');
 
     if (userName != null || userName != undefined) {
       const octokit = new Octokit({
