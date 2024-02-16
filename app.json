@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "github-social-ctrl-react-native",
+    "name": "GitHub Social",
     "slug": "github-social-ctrl-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,8 +8,7 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -21,13 +20,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.gabrielsouzadev.githubsocialctrlreactnative"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "fe8d4a0c-2833-4562-af42-6b3895d7f86e"
+      }
+    }
   }
 }
