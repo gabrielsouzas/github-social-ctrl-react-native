@@ -20,7 +20,6 @@ export default function StackRoutes() {
 
         // Se houver dados do usuário, direciona para a Home
         if (!userName) {
-          console.log('register');
           setInitialRoute('Register');
         } else {
           setInitialRoute('Home');
