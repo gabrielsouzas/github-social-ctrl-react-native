@@ -1,4 +1,4 @@
-# <img src="./src/images/logo_01.jpeg" width="30" height="30" /> GitHub Social Management - React Native App
+# <img src="./src/images/logo_03_rounded.png" width="30" height="30" /> GitHub Social Management - React Native App
 
 GitHub Social Management is a mobile application built in React Native that allows you to explore and manage a user's followers on GitHub. The application uses AsyncStorage to store information locally and the GitHub API to obtain and control real-time data.
 
@@ -63,6 +63,46 @@ Run the application on an emulator or physical device with Expo:
 cd github-social-ctrl-react-native
 npx expo start
 ```
+
+## 📡 API Requests
+
+The following are the main requests made to the GitHub API.
+
+### 1. Get User Followers
+
+**Endpoint:** `GET /users/{username}/followers`
+
+**Description:** Retrieves the list of followers for a given GitHub user.
+
+### 2. Get User Following
+
+**Endpoint:** `GET /users/{username}/following`
+
+**Description:** Fetches the list of users that a given GitHub user is following.
+
+### 3. Follow User
+
+**Endpoint:** `PUT /user/following/{username}`
+
+**Description:** Follow a GitHub user.
+
+**Note:** Provide access token.
+
+### 4. UnFollow User
+
+**Endpoint:** `DELETE /user/following/{username}`
+
+**Description:** UnFollow a GitHub user.
+
+**Note:** Provide access token.
+
+### 4. Get User Details
+
+**Endpoint:** `GET /users/{username}`
+
+**Description:** Retrieves detailed information about a specific GitHub user.
+
+Feel free to explore the corresponding code in the source files to understand the implementation details.
 
 ## 🤝 Contribution
 
