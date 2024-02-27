@@ -59,9 +59,86 @@ export default function Home({ navigation }) {
     checkUserInfo();
   });
 
-  /*const handleSearch = async () => {
+  const getData = async (value) => {
+    const data = await fetchAll(value);
+    if (data) {
+      if ('error' in data) {
+        setMessage('Error fetching data');
+        setError(`Error: ${data.error}`);
+        setModalVisible(true);
+      }
+    }
+    return data;
+  };
+
+  const handleSearch = async () => {
     setIsSearching(true);
+
     try {
+      // Guide
+      /*
+        'Select an item',
+        'Search user',
+        'Followers',
+        'Following',
+        `Followed who don't follow you`,
+        `Followed who don't follow you not organizations`,
+        `Followers you don't follow`,
+        'Organizations',
+      */
+      if (selection === 1) {
+      } else if (selection === 2) {
+        const following = await getData('following');
+        if (following) {
+          setItemButtonText('Unfollow');
+          setData(following);
+        }
+      } else if (selection === 3) {
+        const followers = await getData('followers');
+        const following = await getData('following');
+
+        const newFollowers = await setButtonsFollowers(followers, following);
+
+        setItemButtonText('Unfollow');
+        setData(newFollowers);
+      } else {
+        const following = await getData('following');
+        const followers = await getData('followers');
+
+        if (followers && following) {
+          if (selection === 4) {
+            const followingNotFollowers = await compareFollowersFollowing(
+              followers,
+              following
+            );
+            setItemButtonText('Unfollow');
+            setData(followingNotFollowers);
+          } else if (selection === 5) {
+            const followersNotFollowingNotOrg =
+              await compareFollowersFollowingNotOrg(followers, following);
+            setItemButtonText('Unfollow');
+            setData(followersNotFollowingNotOrg);
+          } else if (selection === 6) {
+            const followersNotFollowing = await compareFollowersFollowing(
+              following,
+              followers
+            );
+            setItemButtonText('Follow');
+            setData(followersNotFollowing);
+          } else if (selection === 7) {
+            const organizations = await getOrganizations(following);
+            setItemButtonText('Unfollow');
+            setData(organizations);
+          }
+        }
+      }
+    } catch (error) {
+      console.log(`Error searching data. Error: ${error}`);
+    } finally {
+      setIsSearching(false);
+    }
+
+    /* try {
       let value = null;
       switch (selection) {
         case 1:
@@ -76,46 +153,106 @@ export default function Home({ navigation }) {
       }
 
       if (value) {
-        const following = await fetchAll(value);
+        if (value === 'following') {
+          const following = await getData('following');
+          if (following) {
+            setItemButtonText('Unfollow');
+            setData(following);
+          }
+        } else {
+          const followers = await getData('followers');
+          const following = await getData('following');
 
-        setData(following);
+          if (followers && following) {
+            const followersNotFollowing = await compareFollowersFollowing(
+              following,
+              followers
+            );
+
+            const newfollowersNotFollowing = followers.map((item) => {
+              const matchingItem = followersNotFollowing.find(
+                (item2) => item2.login === item.login
+              );
+
+              if (matchingItem) {
+                // Se o item existe em array2, adiciona o novo atributo
+                return { ...item, buttonText: 'Follow' };
+              }
+
+              // Se não, retorna o item1 sem modificar
+              return item;
+            });
+
+            setItemButtonText('Unfollow');
+            setData(newfollowersNotFollowing);
+          }
+        }
       } else {
-        const following = await fetchAll('following');
-        const followers = await fetchAll('followers');
+        const following = await getData('following');
+        const followers = await getData('followers');
 
-        if (selection === 3) {
-          const followingNotFollowers = await compareFollowersFollowing(
-            followers,
-            following
-          );
-          setData(followingNotFollowers);
-        } else if (selection === 4) {
-          const followersNotFollowing = await compareFollowersFollowing(
-            following,
-            followers
-          );
-          setData(followersNotFollowing);
+        if (followers && following) {
+          if (selection === 3) {
+            const followingNotFollowers = await compareFollowersFollowing(
+              followers,
+              following
+            );
+            setItemButtonText('Unfollow');
+            setData(followingNotFollowers);
+          } else if (selection === 4) {
+            const followersNotFollowingNotOrg =
+              await compareFollowersFollowingNotOrg(followers, following);
+            setItemButtonText('Unfollow');
+            setData(followersNotFollowingNotOrg);
+          } else if (selection === 5) {
+            const followersNotFollowing = await compareFollowersFollowing(
+              following,
+              followers
+            );
+            setItemButtonText('Follow');
+            setData(followersNotFollowing);
+          }
         }
       }
     } catch (error) {
       console.log(`Error searching data. Error: ${error}`);
     } finally {
       setIsSearching(false);
-    }
-  };*/
-
-  const getData = async (value) => {
-    const data = await fetchAll(value);
-    if (data) {
-      if ('error' in data) {
-        setMessage('Error fetching data');
-        setError(`Error: ${data.error}`);
-        setModalVisible(true);
-      }
-    }
-    return data;
+    } */
   };
 
+  const setButtonsFollowers = async (followers, following) => {
+    try {
+      if (followers && following) {
+        const followersNotFollowing = await compareFollowersFollowing(
+          following,
+          followers
+        );
+
+        const newfollowersNotFollowing = followers.map((item) => {
+          const matchingItem = followersNotFollowing.find(
+            (item2) => item2.login === item.login
+          );
+
+          if (matchingItem) {
+            // Se o item existe em array2, adiciona o novo atributo
+            return { ...item, buttonText: 'Follow' };
+          }
+
+          // Se não, retorna o item1 sem modificar
+          return item;
+        });
+
+        return newfollowersNotFollowing;
+      }
+      return null;
+    } catch (error) {
+      console.log(`Erro comparing data. Error: ${error.message}`);
+      return null;
+    }
+  };
+
+  /*
   const handleSearch = async () => {
     setIsSearching(true);
 
@@ -201,6 +338,7 @@ export default function Home({ navigation }) {
       setIsSearching(false);
     }
   };
+  */
 
   function compareFollowersFollowing(content, container) {
     const result = container.filter(
@@ -216,6 +354,12 @@ export default function Home({ navigation }) {
     );
 
     const filterOrg = result.filter((item) => item.type === 'User');
+
+    return filterOrg;
+  }
+
+  function getOrganizations(users) {
+    const filterOrg = users.filter((item) => item.type === 'Organization');
 
     return filterOrg;
   }
@@ -382,6 +526,7 @@ export default function Home({ navigation }) {
         <Select
           data={[
             'Select an item',
+            'Search user',
             'Followers',
             'Following',
             `Followed who don't follow you`,

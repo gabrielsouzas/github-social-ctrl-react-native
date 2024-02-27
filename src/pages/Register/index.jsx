@@ -30,27 +30,9 @@ export default function Register() {
 
   const [user, setUser] = useState(null);
 
-  /* const [user, setUser] = useState({
-    name: 'Octocat',
-    avatar_url: '',
-    blog: 'https://github.com/blog',
-    location: 'San Francisco',
-    email: 'octocat@github.com',
-    bio: 'There once was...',
-    public_repos: 2,
-    public_gists: 1,
-    followers: 20,
-    following: 0,
-  }); */
-
   useEffect(() => {
     loadUserData();
     loadAcessToken();
-
-    // fetchUserLoggedData();
-
-    console.log(`Username: ${username}`);
-    console.log(user);
   }, []);
 
   const loadUserData = async () => {
