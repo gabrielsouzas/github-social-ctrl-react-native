@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   buttonContainer: {
-    flex: 1,
+    marginBottom: 10,
   },
   button: {
     alignItems: 'center',
@@ -113,6 +113,73 @@ const styles = StyleSheet.create({
     color: '#e76767d5',
     marginLeft: 127,
     marginBottom: 2,
+  },
+  /* User Info */
+  userInfoContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+  },
+  name: {
+    color: '#FFF5',
+    fontWeight: '700',
+    fontSize: 20,
+  },
+  value: {
+    color: '#FFF',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  top: {
+    marginBottom: 5,
+  },
+  contact: {},
+  email: {
+    color: '#4078c0',
+  },
+  blog: {
+    color: '#4078c0',
+  },
+  social: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginRight: 14,
+    marginLeft: 14,
+    gap: 3,
+  },
+  card: {
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFF1',
+    padding: 8,
+    borderRadius: 8,
+    margin: 5,
+    width: 90,
+    height: 70,
+  },
+  cardLeft: {
+    marginTop: 35,
+  },
+  cardCenter: {
+    marginTop: 8,
+  },
+  cardRight: {
+    marginTop: 35,
+  },
+  cardUp: {
+    color: '#FFF',
+    fontSize: 12,
+  },
+  cardDown: {
+    color: '#6e5494',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 });
 

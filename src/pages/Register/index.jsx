@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ScrollView,
   Text,
@@ -7,10 +7,9 @@ import {
   View,
   ActivityIndicator,
   StatusBar,
-  Platform,
-  ToastAndroid,
+  Image,
+  Pressable,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import styles from './style';
@@ -20,21 +19,38 @@ import {
   saveApiKey,
   setItem,
 } from '../../utils/asyncStorage';
+import { fetchUserData } from '../../requests/userRequests';
 
-export default function Register({ navigation }) {
-  // const navigationStack = useNavigation();
-
+export default function Register() {
   const [username, setUsername] = useState('');
   const [token, setToken] = useState('');
   const [errors, setErrors] = useState({});
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const textInputTokenRef = useRef(null);
+  const [user, setUser] = useState(null);
+
+  /* const [user, setUser] = useState({
+    name: 'Octocat',
+    avatar_url: '',
+    blog: 'https://github.com/blog',
+    location: 'San Francisco',
+    email: 'octocat@github.com',
+    bio: 'There once was...',
+    public_repos: 2,
+    public_gists: 1,
+    followers: 20,
+    following: 0,
+  }); */
 
   useEffect(() => {
     loadUserData();
     loadAcessToken();
+
+    // fetchUserLoggedData();
+
+    console.log(`Username: ${username}`);
+    console.log(user);
   }, []);
 
   const loadUserData = async () => {
@@ -44,6 +60,8 @@ export default function Register({ navigation }) {
         const username = JSON.parse(response);
 
         setUsername(username);
+
+        await fetchUserLoggedData(username);
       }
     } catch (error) {
       console.log(error);
@@ -87,11 +105,12 @@ export default function Register({ navigation }) {
           await deleteApiKey();
         }
       }
+
+      fetchUserLoggedData(username);
     } catch (error) {
       console.log(`Erro ao salvar dados. Erro: ${error}`);
     } finally {
       setIsSaving(false);
-      // navigation.navigate('Home');
     }
   };
 
@@ -105,22 +124,15 @@ export default function Register({ navigation }) {
     return newErrors;
   };
 
-  // OnPaste Token entry
-  const handlePaste = (event) => {
-    const pastedText = event.nativeEvent.text;
-    setToken(pastedText);
-  };
-
-  const handleLongPress = () => {
-    // Show context menu only on Android
-    console.log('log press');
-    if (Platform.OS === 'android') {
-      textInputTokenRef.current.showMenuContext();
-    } else {
-      ToastAndroid.show(
-        'Context menu not supported on iOS',
-        ToastAndroid.SHORT
-      );
+  // Carrega os dados do usuário assim que fornecidos
+  const fetchUserLoggedData = async (username) => {
+    try {
+      if (username.length > 0) {
+        const response = await fetchUserData(username);
+        setUser(response.data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -133,7 +145,7 @@ export default function Register({ navigation }) {
       />
     </View>
   ) : (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <View style={styles.container}>
       <StatusBar
         animated
         backgroundColor="#0D1117"
@@ -154,7 +166,7 @@ export default function Register({ navigation }) {
           placeholder="Nome de usuário no GitHub"
           placeholderTextColor="#e1e2df80"
           value={username}
-          onChangeText={(newText) => setUsername(newText)}
+          onChangeText={(newText) => setUsername(newText.toLowerCase())}
         />
       </View>
 
@@ -189,6 +201,51 @@ export default function Register({ navigation }) {
           )}
         </TouchableOpacity>
       </View>
-    </ScrollView>
+
+      {user && (
+        <View style={styles.userInfoContainer}>
+          <Image
+            style={styles.avatar}
+            source={
+              user.avatar_url.length > 0
+                ? { uri: user.avatar_url }
+                : require('../../images/logo_03.jpg')
+            }
+          />
+          <Text style={styles.name}>{user.name}</Text>
+
+          <View style={styles.top}>
+            <Text style={styles.value}>{user.bio || 'No BIO'}</Text>
+            <Text style={styles.value}>{user.location || 'No Location'}</Text>
+          </View>
+
+          <View style={styles.contact}>
+            <Text style={[styles.value, styles.email]}>
+              {user.email ? `E-Mail: ${user.email}` : 'No E-Mail'}
+            </Text>
+            <Text style={[styles.value, styles.blog]}>
+              {user.blog ? `Blog: ${user.blog}` : 'No Blog'}
+            </Text>
+          </View>
+
+          <View style={styles.social}>
+            <View style={[styles.card, styles.cardLeft]}>
+              <Text style={styles.cardUp}>Followers</Text>
+              <Text style={styles.cardDown}>{user.followers || 'None'}</Text>
+            </View>
+
+            <View style={[styles.card, styles.cardCenter]}>
+              <Text style={styles.cardUp}>Repos</Text>
+              <Text style={styles.cardDown}>{user.public_repos || 'None'}</Text>
+            </View>
+
+            <View style={[styles.card, styles.cardRight]}>
+              <Text style={styles.cardUp}>Following</Text>
+              <Text style={styles.cardDown}>{user.following || 'None'}</Text>
+            </View>
+          </View>
+        </View>
+      )}
+    </View>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Home from '../pages/Home';
 import Register from '../pages/Register';
@@ -44,7 +43,7 @@ export default function StackRoutes() {
 
       <Stack.Screen
         options={{
-          title: 'Registration',
+          title: 'Registro',
           headerTintColor: '#FFF',
           headerStyle: {
             backgroundColor: '#0D1117',
