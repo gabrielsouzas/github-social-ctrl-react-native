@@ -6,3 +6,18 @@
 
 - Security layer for inserting the access token
 
+## [1.0.1] - 2024-02-27
+
+### Fix
+
+- Correction of incorrect conditions in main requests
+
+### Refactoring
+
+- Refactoring the main function that manages user requests in the application interface
+
+## [1.0.2] - 2024-02-28
+
+### Add
+
+- Added a new user search functionality by name

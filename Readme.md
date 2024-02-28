@@ -8,11 +8,13 @@ GitHub Social Management is a mobile application built in React Native that allo
 - Compare followers and see who doesn't follow a user back;
 - Compare followers and see who follows a user and isn't followed back;
 - Follow or unfollow a user from the app itself;
-- View a Github user's complete data according to the GitHub API.
+- View a Github user's complete data according to the GitHub API;
+- Search for a user or organization by their login or name;
+- View your updated GitHub information.
 
 ## 📷 Screenshots
 
-<img src="./src/images/screenshoot01.jpeg" height="500" /> <img src="./src/images/screenshoot02.jpeg" height="500" />
+<img src="./src/images/screenshoot01.jpeg" height="500" /> <img src="./src/images/screenshoot02.jpeg" height="500" /> <img src="./src/images/screenshoot03.jpeg" height="500" /> <img src="./src/images/screenshoot04.jpeg" height="500" />
 
 ## 🛠️ Tools, Technologies, and Libraries
 
@@ -101,6 +103,12 @@ The following are the main requests made to the GitHub API.
 **Endpoint:** `GET /users/{username}`
 
 **Description:** Retrieves detailed information about a specific GitHub user.
+
+### 5. Search User
+
+**Endpoint:** `GET /search/users`
+
+**Description:** Returns users with the name matching the given search string.
 
 Feel free to explore the corresponding code in the source files to understand the implementation details.
 
