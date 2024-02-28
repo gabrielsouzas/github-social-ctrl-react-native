@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
   input: {
-    flex: 1,
+    marginLeft: 14,
+    marginRight: 14,
     color: '#FFF',
     borderWidth: 1,
     borderColor: 'rgba(225, 226, 223, 0.5)',

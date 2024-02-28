@@ -24,7 +24,7 @@ export default function StackRoutes() {
           setInitialRoute('Home');
         }
       } catch (error) {
-        console.error('Erro ao verificar os dados do usuário:', error);
+        console.error('Error verifying user data:', error.message);
       }
     };
 
@@ -43,7 +43,7 @@ export default function StackRoutes() {
 
       <Stack.Screen
         options={{
-          title: 'Registro',
+          title: 'Register',
           headerTintColor: '#FFF',
           headerStyle: {
             backgroundColor: '#0D1117',

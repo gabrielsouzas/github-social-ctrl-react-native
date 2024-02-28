@@ -10,7 +10,7 @@ export async function fetchAll(res) {
     const userName = await getUserDataAsyncStorage('username');
     const acessToken = await getApiKey('acessToken');
 
-    if (userName != null || userName != undefined) {
+    if (userName != null && userName != undefined) {
       const octokit = new Octokit({
         auth: acessToken || '',
       });
@@ -51,7 +51,7 @@ export async function followUser(username) {
     const userName = await getUserDataAsyncStorage('username');
     const acessToken = await getApiKey('acessToken');
 
-    if (userName != null || userName != undefined) {
+    if (userName != null && userName != undefined) {
       const octokit = new Octokit({
         auth: acessToken || '',
       });
@@ -85,7 +85,7 @@ export async function unFollowUser(username) {
     const userName = await getUserDataAsyncStorage('username');
     const acessToken = await getApiKey('acessToken');
 
-    if (userName != null || userName != undefined) {
+    if (userName != null && userName != undefined) {
       const octokit = new Octokit({
         auth: acessToken || '',
       });
@@ -119,7 +119,7 @@ export async function fetchUserData(username) {
     const userName = await getUserDataAsyncStorage('username');
     const acessToken = await getApiKey('acessToken');
 
-    if (userName != null || userName != undefined) {
+    if (userName != null && userName != undefined) {
       const octokit = new Octokit({
         auth: acessToken || '',
       });
@@ -136,6 +136,36 @@ export async function fetchUserData(username) {
     return { status: 'empty', message: 'AsyncStorage data not found' };
   } catch (error) {
     console.error('Error getting data:', error);
+    return { status: 'error', message: `Error fetching data. Error: ${error}` };
+  }
+}
+
+export async function fetchSearchUser(name) {
+  try {
+    const userName = await getUserDataAsyncStorage('username');
+    const acessToken = await getApiKey('acessToken');
+
+    if (userName != null && userName != undefined) {
+      const octokit = new Octokit({
+        auth: acessToken || '',
+      });
+
+      const queryString = 'q=' + encodeURIComponent(`${name}`);
+
+      const response = await octokit.request(
+        `GET /search/users?${queryString}&per_page=100&page=1`,
+        {
+          headers: {
+            'X-GitHub-Api-Version': '2022-11-28',
+          },
+        }
+      );
+
+      return response;
+    }
+    return { status: 'empty', message: 'AsyncStorage data not found' };
+  } catch (error) {
+    console.error('Error fetching data:', error.message || error);
     return { status: 'error', message: `Error fetching data. Error: ${error}` };
   }
 }

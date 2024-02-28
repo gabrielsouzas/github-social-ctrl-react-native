@@ -90,7 +90,7 @@ export default function Register() {
 
       fetchUserLoggedData(username);
     } catch (error) {
-      console.log(`Erro ao salvar dados. Erro: ${error}`);
+      console.log(`Error saving data. Error: ${error}`);
     } finally {
       setIsSaving(false);
     }
@@ -137,7 +137,7 @@ export default function Register() {
       />
 
       <View style={styles.header}>
-        <Text style={styles.title}>Insira suas informações</Text>
+        <Text style={styles.title}>Enter your information</Text>
       </View>
 
       {errors.username && <Text style={styles.error}>* {errors.username}</Text>}
@@ -145,7 +145,7 @@ export default function Register() {
         <Text style={styles.label}>UserName:</Text>
         <TextInput
           style={styles.input}
-          placeholder="Nome de usuário no GitHub"
+          placeholder="GitHub username"
           placeholderTextColor="#e1e2df80"
           value={username}
           onChangeText={(newText) => setUsername(newText.toLowerCase())}
@@ -155,15 +155,11 @@ export default function Register() {
       <View style={styles.content}>
         <Text style={styles.label}>Token:</Text>
         <TextInput
-          /*ref={textInputTokenRef}*/
           style={styles.input}
           secureTextEntry
-          placeholder="Personal Acess Token (Opcional) "
+          placeholder="Personal Acess Token (Optional) "
           placeholderTextColor="#e1e2df80"
           onChangeText={(newText) => setToken(newText)}
-          /*editable={true}
-          onPaste={handlePaste}
-          onLongPress={() => handleLongPress()}*/
           value={token}
         />
       </View>
@@ -175,11 +171,11 @@ export default function Register() {
         >
           {isSaving ? (
             <>
-              <Text style={styles.buttonSaveText}>Salvando</Text>
+              <Text style={styles.buttonSaveText}>Saving</Text>
               <ActivityIndicator size="small" color="#FFF" />
             </>
           ) : (
-            <Text style={styles.buttonSaveText}>Salvar</Text>
+            <Text style={styles.buttonSaveText}>Save</Text>
           )}
         </TouchableOpacity>
       </View>

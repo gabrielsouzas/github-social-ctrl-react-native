@@ -8,6 +8,7 @@ import {
   StatusBar,
   FlatList,
   Image,
+  TextInput,
 } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +17,7 @@ import styles from './style';
 import Select from '../../components/Select';
 import {
   fetchAll,
+  fetchSearchUser,
   followUser,
   unFollowUser,
 } from '../../requests/userRequests';
@@ -38,6 +40,7 @@ export default function Home({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [message, setMessage] = useState('Message');
   const [error, setError] = useState('Error');
+  const [searchString, setSearchString] = useState('');
 
   const [modalUserDataVisible, setModalUserDataVisible] = useState(false);
   const [clickedUsername, setClickedUsername] = useState('');
@@ -87,6 +90,22 @@ export default function Home({ navigation }) {
         'Organizations',
       */
       if (selection === 1) {
+        if (searchString.length > 0) {
+          const users = await fetchSearchUser(searchString);
+          if (users) {
+            if (users.data.total_count > 0) {
+              const following = await getData('following');
+
+              const search = await setButtonsFollowers(
+                users.data.items,
+                following
+              );
+
+              setItemButtonText('Unfollow');
+              setData(search);
+            }
+          }
+        }
       } else if (selection === 2) {
         const following = await getData('following');
         if (following) {
@@ -538,6 +557,16 @@ export default function Home({ navigation }) {
           selection
         />
       </View>
+
+      {selection === 1 && (
+        <TextInput
+          style={styles.input}
+          placeholder="User name"
+          placeholderTextColor="#e1e2df80"
+          value={searchString}
+          onChangeText={(newText) => setSearchString(newText)}
+        />
+      )}
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
