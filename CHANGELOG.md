@@ -1,12 +1,12 @@
 # Changelog
 
-## [1.0.1] - 2024-02-10
+## [1.0.1] - 2024-02-28
 
 ### Add
 
-- Security layer for inserting the access token
+- Added a new user search functionality by name
 
-## [1.0.1] - 2024-02-27
+## [1.0.0] - 2024-02-27
 
 ### Fix
 
@@ -16,8 +16,10 @@
 
 - Refactoring the main function that manages user requests in the application interface
 
-## [1.0.2] - 2024-02-28
+## [1.0.0] - 2024-02-10
 
 ### Add
 
-- Added a new user search functionality by name
+- Security layer for inserting the access token
+
+
