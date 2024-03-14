@@ -386,7 +386,7 @@ export default function Home({ navigation }) {
             'Following',
             'Followers',
             `Followed who don't follow you`,
-            `Followed who don't follow you not organizations`,
+            `Followed who don't follow you not org`,
             `Followers you don't follow`,
             'Organizations',
           ]}

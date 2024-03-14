@@ -27,35 +27,47 @@ GitHub Social Management is a mobile application built in React Native that allo
 
 ## ⚙️ Prerequisites
 
-Make sure you have the React Native environment configured on your machine. For more information, see [React Native - Getting Started](https://reactnative.dev/docs/getting-started).
+Before you start working with this project, make sure you have met the following requirements:
 
-Or use Expo, see [Expo.dev](https://expo.dev/).
+1. **Node.js and npm:** You must have Node.js installed on your system. You can download it [here](https://nodejs.org/).
+
+2. **Expo CLI:** This project uses Expo for development. Make sure you have Expo CLI installed globally. You can install it by running the following command:
+
+   ```shell
+   npm install -g expo-cli
+   ```
+
+3. **Expo Go (optional):** If you plan to test the app on a physical mobile device, make sure you have Expo Go installed on your device. You can download it from the [App Store](https://apps.apple.com/us/app/expo-go/id982107779) for iOS devices or the [Google Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en&gl=US) for Android devices.
+
+For more information, see [React Native - Getting Started](https://reactnative.dev/docs/getting-started).
+
+And Expo, see [Expo.dev](https://expo.dev/).
 
 ## 🔧 Installation
 
 1. Clone the repository:
 
-```bash
-git clone https://github.com/gabrielsouzas/github-social-ctrl-react-native.git
-```
+   ```bash
+   git clone https://github.com/gabrielsouzas/github-social-ctrl-react-native.git
+   ```
 
 2. Navigate to the project directory:
 
-```bash
-cd github-social-ctrl-react-native
-```
+   ```bash
+   cd github-social-ctrl-react-native
+   ```
 
 3. Install dependencies:
 
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
-or
+   or
 
-```bash
-yarn install
-```
+   ```bash
+   yarn install
+   ```
 
 ## ▶️ Usage
 
@@ -112,7 +124,7 @@ The following are the main requests made to the GitHub API.
 
 Feel free to explore the corresponding code in the source files to understand the implementation details.
 
-## Deploy
+## 🚀 Deploy
 
 Production builds are done using EAS (Expo Application Services).
 
@@ -138,7 +150,7 @@ To continue, check the documentation on [Expo](https://docs.expo.dev/deploy/buil
 
 #### APK - Build APKs for Android Emulators and devices
 
-1. Configuring a profile to build APKs
+**1 - Configuring a profile to build APKs**
 
 To generate an .apk, modify the eas.json by adding one of the following properties in a build profile:
 
@@ -147,7 +159,7 @@ To generate an .apk, modify the eas.json by adding one of the following properti
 - android.buildType to apk
 - android.gradleCommand to :app:assembleRelease, :app:assembleDebug or any other gradle command that produces .apk
 
-Example: eas.json
+**Example: eas.json**
 
 ```json
 {
@@ -173,7 +185,7 @@ Example: eas.json
 }
 ```
 
-2. Now you can run your build with the following command:
+**2 - Now you can run your build with the following command:**
 
 ```shell
 eas build -p android --profile preview
@@ -181,9 +193,9 @@ eas build -p android --profile preview
 
 Remember that you can name the profile whatever you like. We named the profile preview. However, you can call it local, emulator, or whatever makes the most sense for you.
 
-3. Download and install your APK in [Expo.dev](https://expo.dev/) or by the link provided at the end of the build
+**3 - Download and install your APK in [Expo.dev](https://expo.dev/) or by the link provided at the end of the build**
 
-To install, transfer the APK file to a device or emulator. A device will be asked for permission for potentially dangerous applications, as it has not been verified by Play Protect (Play Store). The application will only be installed with this permission granted.
+To install, transfer the APK file to a device or emulator. A device will be asked for permission for potentially dangerous applications, as it has not been verified by Play Protect (**Play Store**). The application will only be installed with this permission granted.
 
 ## 🤝 Contribution
 
