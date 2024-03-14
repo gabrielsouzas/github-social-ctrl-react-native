@@ -112,6 +112,8 @@ The following are the main requests made to the GitHub API.
 
 Feel free to explore the corresponding code in the source files to understand the implementation details.
 
+### 6. Publish
+
 ## 🤝 Contribution
 
 Contributions are welcome! Feel free to open issues, propose improvements or send pull requests.

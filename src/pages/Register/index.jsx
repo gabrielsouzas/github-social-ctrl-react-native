@@ -56,8 +56,6 @@ export default function Register() {
     try {
       const response = await getApiKey('acessToken');
       if (response) {
-        // const acessToken = JSON.parse(response);
-
         setToken(response);
       }
     } catch (error) {

@@ -35,7 +35,11 @@ export async function fetchAll(res) {
 
       return allItens;
     }
-    return { status: 'empty', message: 'AsyncStorage data not found' };
+    return {
+      status: 'error',
+      message: 'AsyncStorage data not found',
+      error: 'AsyncStorage access error',
+    };
   } catch (error) {
     console.error('Error getting data:', error);
     return {

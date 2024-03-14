@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.1] - 2024-03-14
+
+### Fix
+
+- Correction of inverted descriptions of options - followewrs/following
+
 ## [1.0.1] - 2024-02-28
 
 ### Add
