@@ -112,9 +112,29 @@ The following are the main requests made to the GitHub API.
 
 Feel free to explore the corresponding code in the source files to understand the implementation details.
 
-### 6. Publish
+## Deploy
 
-#### AAB
+Production builds are done using EAS (Expo Application Services).
+
+To deploy your application you need to have an [Expo](https://expo.dev/) account.
+
+Then install the EAS CLI and log in to your account.
+
+```shell
+npm install --global eas-cli
+
+eas login
+```
+
+#### AAB - Build your project for app stores
+
+Create a production build
+
+```shell
+eas build --platform android
+```
+
+To continue, check the documentation on [Expo](https://docs.expo.dev/deploy/build-project/)
 
 #### APK - Build APKs for Android Emulators and devices
 
