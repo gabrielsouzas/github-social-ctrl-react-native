@@ -114,6 +114,57 @@ Feel free to explore the corresponding code in the source files to understand th
 
 ### 6. Publish
 
+#### AAB
+
+#### APK - Build APKs for Android Emulators and devices
+
+1. Configuring a profile to build APKs
+
+To generate an .apk, modify the eas.json by adding one of the following properties in a build profile:
+
+- developmentClient to true (default)
+- distribution to internal
+- android.buildType to apk
+- android.gradleCommand to :app:assembleRelease, :app:assembleDebug or any other gradle command that produces .apk
+
+Example: eas.json
+
+```json
+{
+  "build": {
+    "preview": {
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview2": {
+      "android": {
+        "gradleCommand": ":app:assembleRelease"
+      }
+    },
+    "preview3": {
+      "developmentClient": true
+    },
+    "preview4": {
+      "distribution": "internal"
+    },
+    "production": {}
+  }
+}
+```
+
+2. Now you can run your build with the following command:
+
+```shell
+eas build -p android --profile preview
+```
+
+Remember that you can name the profile whatever you like. We named the profile preview. However, you can call it local, emulator, or whatever makes the most sense for you.
+
+3. Download and install your APK in [Expo.dev](https://expo.dev/) or by the link provided at the end of the build
+
+To install, transfer the APK file to a device or emulator. A device will be asked for permission for potentially dangerous applications, as it has not been verified by Play Protect (Play Store). The application will only be installed with this permission granted.
+
 ## 🤝 Contribution
 
 Contributions are welcome! Feel free to open issues, propose improvements or send pull requests.
