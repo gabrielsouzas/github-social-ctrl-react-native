@@ -2,6 +2,8 @@
 
 GitHub Social Management is a mobile application built in React Native that allows you to explore and manage a user's followers on GitHub. The application uses AsyncStorage to store information locally and the GitHub API to obtain and control real-time data.
 
+To use the application you will need a Fine-grained Token from GitHub. But don't worry, we teach you how to get one below and it's very simple. This token will be stored in your .env file or in your smartphone's internal storage, meaning you can guarantee the security of your token yourself.
+
 ## 🚀 Functionalities
 
 - See a GitHub user's following and followers;
@@ -78,9 +80,25 @@ cd github-social-ctrl-react-native
 npx expo start
 ```
 
-## 📡 API Requests
+## 📡 GitHub API
+
+To use the application you will need a Fine-grained Token from GitHub, follow the steps below to get one.
+
+[Direct Link](https://github.com/settings/tokens?type=beta)
+
+* Access your Github account settings;
+* Access Developer Settings;
+* Click on the Personal Access Tokens menu;
+* Click on Fine-grained Tokens;
+* Click on Generate New Token;
+* Enter the expiration date and generate the token;
+* Copy the token, and be careful, as the token will only be available for copying this one time.
+
+Now you can take the copied token and add it to your .env file in the project root or insert it into the application field to use normally. Remembering that after the expiration date you will need to generate a new Token.
 
 The following are the main requests made to the GitHub API.
+
+**API Requests**
 
 ### 1. Get User Followers
 
